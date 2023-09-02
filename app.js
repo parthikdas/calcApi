@@ -1,3 +1,12 @@
+/* new changes
+ - add file system where u store the history
+ and retrieve while /
+ - put it in projects folder
+ - testing with jest or mocha
+
+*/
+
+
 const http = require('http')
 
 let history = []
@@ -28,8 +37,7 @@ http.createServer(function(req, res) {
                 getReq:"2/divide",
                 question : "2/1",
                 answer : "1"
-            }
-            ,
+            },
             {
                 getReq:"2/mod",
                 question : "2%1",
@@ -39,17 +47,30 @@ http.createServer(function(req, res) {
                 getReq:"2/exp/2",
                 question : "2**2",
                 answer : "4"
-            }
-            ,
+            },
             {
                 getReq:"3/and/1",
                 question : "3&&1",
                 answer : "1"
-            }
-            ,
+            },
             {
                 getReq:"3/or/1",
                 question : "3||1",
+                answer : "3"
+            },
+            {
+                getReq:"3/inc",
+                question : "3+1",
+                answer : "4"
+            },
+            {
+                getReq:"3/dec/",
+                question : "3-1",
+                answer : "2"
+            },
+            {
+                getReq:"1/inc/plus/2/divide/2",
+                question : "1+1+2/2",
                 answer : "3"
             }
         ]
@@ -63,6 +84,7 @@ http.createServer(function(req, res) {
         res.end()
     } else if(req.url[1]>'0' && req.url[1]<'9'){ // check for number i.e. math exp
         let arr = req.url.split("/") // Split the string
+        console.log(arr)
         for(let i=0;i<arr.length;i++) {
             if(arr[i] === 'plus') arr[i] = '+'
             else if(arr[i] === 'minus') arr[i] = '-'
@@ -72,6 +94,16 @@ http.createServer(function(req, res) {
             else if(arr[i] === 'exp') arr[i] = '**'
             else if(arr[i] === 'and') arr[i] = '&&'
             else if(arr[i] === 'or') arr[i] = '||'
+            else if(arr[i] === 'inc') {
+                arr[i] = '+'
+                if(arr[i+1]) arr.splice(i+1,0,'1')  // If after inc or dec there is more arguments then add 1 after -
+                else arr[i+1]='1' // Else push next val as 1
+            }
+            else if(arr[i] === 'dec') {
+                arr[i] = '-'
+                if(arr[i+1]) arr.splice(i+1,0,'1')  // If after inc or dec there is more arguments then add 1 after -
+                else arr[i+1]='1' // Else push next val as 1
+            }
             // Exception if user does not gives the next number after operator
             if(!arr[i+1]) { // If operator is last index
                 if(arr[i] === '+' || arr[i] === '-' || arr[i] === '||') arr.push('0')
