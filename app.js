@@ -1,13 +1,14 @@
 /* new changes
- - add file system where u store the history
- and retrieve while /
  - put it in projects folder
  - testing with jest or mocha
-
+//https://www.testim.io/blog/jest-testing-a-helpful-introductory-tutorial/
+https://www.testim.io/blog/node-js-unit-testing-get-started-quickly-with-examples/
 */
 
 
 const http = require('http')
+const fs = require('fs');
+const { dirname } = require('path');
 
 let history = []
 
@@ -17,6 +18,15 @@ function parse(str) {
 
 http.createServer(function(req, res) {
     if(req.url === '/') {
+        // Fetch data from history.txt
+        try {
+            history = fs.readFileSync(__dirname + '/history.txt', 'utf8');
+            history = JSON.parse(history)
+        } catch (err) {
+            console.error(err);
+        }
+
+        // demo response i.e. examples
         const demo = [
             {
                 getReq:"1/plus/2/minus/3",
@@ -78,7 +88,13 @@ http.createServer(function(req, res) {
         res.write(JSON.stringify(demo))
         res.end()
     } else if(req.url === '/history') {
-        console.log(history.length)
+        // console.log(history.length)
+        try {
+            history = fs.readFileSync(__dirname + '/history.txt', 'utf8');
+            history = JSON.parse(history)
+        } catch (err) {
+            console.error(err);
+        }
         res.writeHead(200, {"Content-Type": "text/plain"})
         res.write(JSON.stringify(history))
         res.end()
@@ -112,14 +128,22 @@ http.createServer(function(req, res) {
         }
         arr = arr.join("") // Join it without space
         let response = {question: arr, answer: parse(arr)}
+
+        // send response
         res.writeHead(200, {"Content-Type": "text/plain"})
         res.write(JSON.stringify(response))
 
         // Show the date also
         response.time= new Date()
         history.unshift(response) // Add the new response in 1st position
-        if(history.length > 20) history.shift() // If exceeding 20 size remove last 20th index
+        if(history.length > 20) history.pop() // If exceeding 20 size remove last 20th index
 
+        // update history.txt
+        fs.writeFileSync(__dirname + '/history.txt', JSON.stringify(history), err => {
+            if (err) {
+                console.error(err);
+            }            
+        })
         res.end()
     }
 
