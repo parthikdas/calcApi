@@ -9,3 +9,4 @@ There will the examples of how to use the api
 
 ### Jest api testing
 - run `npm i` to install jest
+- used axios for http requests

@@ -8,7 +8,6 @@ https://www.testim.io/blog/node-js-unit-testing-get-started-quickly-with-example
 
 const http = require('http')
 const fs = require('fs');
-const { dirname } = require('path');
 
 let history = []
 

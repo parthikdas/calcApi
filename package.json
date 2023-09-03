@@ -1,0 +1,21 @@
+{
+    "name": "calcApi",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "jest"
+    },
+    "keywords": [
+        "calculator",
+        "api"
+    ],
+    "author": "Parthik Kumar Das",
+    "license": "ISC",
+    "devDependencies": {
+        "jest": "^29.6.4"
+    },
+    "dependencies": {
+        "axios": "^1.5.0"
+    }
+}
